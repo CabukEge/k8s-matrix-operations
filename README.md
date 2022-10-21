@@ -1,2 +1,5 @@
 # Numeric
-Weekly tasks for numeric
+
+Weekly tasks for numerics, therefore the variables are also in German!
+
+
