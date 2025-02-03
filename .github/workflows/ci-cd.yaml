@@ -73,15 +73,6 @@ jobs:
         run: |
           kubectl delete validatingwebhookconfiguration ingress-nginx-admission || true
           kubectl delete validatingwebhookconfiguration ingress-nginx-controller-admission || true
-      
-      - name: Verify NUMERIC Exists
-        run: |
-          if [ -z "${{ secrets.NUMERIC }}" ]; then
-            echo "NUMERIC does not exist. Exiting pipeline."
-            exit 1
-          else
-            echo "NUMERIC exists."
-          fi
 
       - name: Create and Verify GHCR Secret in Kubernetes
         run: |
