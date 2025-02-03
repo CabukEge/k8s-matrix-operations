@@ -81,6 +81,12 @@ jobs:
             --docker-username="${{ github.actor }}" \
             --docker-password="${{ secrets.GITHUB_PAT }}" \
             --docker-email="egecabuk.it@gmail.com" || echo "Secret already exists."
+          # Immediately verify that the secret exists
+          if kubectl get secret ghcr-secret -n default >/dev/null 2>&1; then
+            echo "Secret ghcr-secret exists."
+          else
+            echo "Secret ghcr-secret does not exist!" && exit 1
+          fi
 
       - name: Deploy to Minikube
         run: |
@@ -104,7 +110,10 @@ jobs:
           kubectl get events --sort-by=.metadata.creationTimestamp
 
           echo "=== Check Image Pull Secret ==="
-          kubectl get secret ghcr-secret -o yaml || echo "No ghcr-secret found."
+          if ! kubectl get secret ghcr-secret -o yaml; then
+            echo "No ghcr-secret found. Exiting pipeline."
+            exit 1
+          fi
       
       # Optionally, wait for the deployment to become available with a shorter timeout.
       - name: Wait for deployment
