@@ -7,13 +7,13 @@ from io import BytesIO
 from PIL import Image
 
 # Import numerical modules
-from numeric07_lu import LUP, SolveLinearSystemLUP, LeastSquares
-from numeric08_qr import QRAlgorithm
-from numeric09_eigenvalue import PowerIteration, RayleighQuotientIteration
-from numeric04_imagecompression import Compress, Decompress
+from app.numeric07_lu import LUP, SolveLinearSystemLUP, LeastSquares
+from app.numeric08_qr import QRAlgorithm
+from app.numeric09_eigenvalue import PowerIteration, RayleighQuotientIteration
+from app.numeric04_imagecompression import Compress, Decompress
 from app.numeric04_linearsolver import ComputeSVD, PseudoInverse, LinearSolve
 from app.numeric05_leastsquares import QR, BackSubstitution, LeastSquares as LS_LeastSquares
-from numeric06_svd import ComputeSVD as ComputeSVD6
+from app.numeric06_svd import ComputeSVD as ComputeSVD6
 
 app = FastAPI(
     title="Numeric Operations API",
