@@ -34,7 +34,7 @@ jobs:
 
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
-        
+
       - name: Run tests
         run: |
           python -m pytest tests/ -v
@@ -61,6 +61,14 @@ jobs:
 
       - name: Enable Ingress addon
         run: minikube addons enable ingress
+      
+      - name: Deploy NGINX Ingress Controller
+        run: |
+          kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+          kubectl wait --namespace ingress-nginx \
+            --for=condition=ready pod \
+            --selector=app.kubernetes.io/component=controller \
+            --timeout=120s
 
       - name: Deploy to Minikube
         run: |
