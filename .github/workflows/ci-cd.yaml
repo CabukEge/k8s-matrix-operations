@@ -55,20 +55,24 @@ jobs:
 
       - name: Set up Minikube
         uses: medyagh/setup-minikube@master
-        
+
       - name: Start Minikube tunnel
         run: minikube tunnel &
 
       - name: Enable Ingress addon
         run: minikube addons enable ingress
-      
-      - name: Deploy NGINX Ingress Controller
+
+      - name: Enable Metrics Server addon
+        run: minikube addons enable metrics-server
+
+      - name: Wait for Ingress Controller Pods to be Ready
         run: |
-          kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
-          kubectl wait --namespace ingress-nginx \
-            --for=condition=ready pod \
-            --selector=app.kubernetes.io/component=controller \
-            --timeout=120s
+          kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=300s
+
+      - name: Remove Ingress Admission Webhook (if necessary)
+        run: |
+          kubectl delete validatingwebhookconfiguration ingress-nginx-admission || true
+          kubectl delete validatingwebhookconfiguration ingress-nginx-controller-admission || true
 
       - name: Deploy to Minikube
         run: |
