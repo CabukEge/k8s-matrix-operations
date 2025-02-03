@@ -9,3 +9,4 @@ httpx
 pytest-asyncio
 requests
 IPython
+matplotlib
