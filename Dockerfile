@@ -3,8 +3,12 @@
 # Builder Stage
 FROM python:3.9-slim as builder
 WORKDIR /app
+
+RUN pip install --upgrade pip
+
+# Copy and install dependencies
 COPY requirements.txt .
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Final Stage
 FROM python:3.9-slim
