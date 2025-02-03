@@ -154,7 +154,7 @@ jobs:
 
       - name: Wait for Pods to be Ready
         run: |
-          kubectl wait --for=condition=Ready pod -l app=numeric-api --timeout=300s
+          kubectl wait --for=condition=Ready pod -l app=numeric-api --timeout=1200s
 
       - name: Wait for Deployment to be Available
         run: |
