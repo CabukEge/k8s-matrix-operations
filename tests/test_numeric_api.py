@@ -1,4 +1,4 @@
-# tests/test_api.py
+# tests/test_numeric_api.py
 import sys
 import os
 from pathlib import Path
@@ -17,12 +17,14 @@ client = TestClient(app)
 
 def test_read_root():
     response = client.get("/")
+    print("Response JSON:", response.json())  # Debug output
     assert response.status_code == 200
     assert response.json() == {"message": "Welcome to the Numeric Operations API. Visit /docs for API documentation."}
 
 def test_lu_decomposition():
     matrix = [[4, 3], [6, 3]]
     response = client.post("/api/lu", json={"matrix": matrix})
+    print("Response JSON:", response.json())  # Debug output
     assert response.status_code == 200
     result = response.json()
     assert "L" in result
@@ -33,6 +35,7 @@ def test_solve_linear_system():
     matrix = [[4, 3], [6, 3]]
     vector = [10, 12]
     response = client.post("/api/solve", json={"matrix": matrix, "vector": vector})
+    print("Response JSON:", response.json())  # Debug output
     assert response.status_code == 200
     result = response.json()
     assert "solution" in result
@@ -41,6 +44,7 @@ def test_least_squares():
     matrix = [[1, 1], [1, 2], [1, 3]]
     vector = [2, 4, 6]
     response = client.post("/api/least_squares", json={"matrix": matrix, "vector": vector})
+    print("Response JSON:", response.json())  # Debug output
     assert response.status_code == 200
     result = response.json()
     assert "least_squares_solution" in result
@@ -48,6 +52,7 @@ def test_least_squares():
 def test_qr_algorithm():
     matrix = [[4, 3], [6, 3]]
     response = client.post("/api/qr", json={"matrix": matrix})
+    print("Response JSON:", response.json())  # Debug output
     assert response.status_code == 200
     result = response.json()
     assert "eigenvalues" in result
@@ -56,6 +61,7 @@ def test_power_iteration():
     matrix = [[4, 3], [6, 3]]
     vector = [1, 1]
     response = client.post("/api/power_iteration", json={"matrix": matrix, "vector": vector})
+    print("Response JSON:", response.json())  # Debug output
     assert response.status_code == 200
     result = response.json()
     assert "power_iteration_eigenvalues" in result
@@ -64,6 +70,7 @@ def test_rayleigh_iteration():
     matrix = [[4, 3], [6, 3]]
     vector = [1, 1]
     response = client.post("/api/rayleigh_iteration", json={"matrix": matrix, "vector": vector})
+    print("Response JSON:", response.json())  # Debug output
     assert response.status_code == 200
     result = response.json()
     assert "rayleigh_iteration_eigenvalues" in result
@@ -71,6 +78,7 @@ def test_rayleigh_iteration():
 def test_svd_decomposition():
     matrix = [[4, 3], [6, 3]]
     response = client.post("/api/svd", json={"matrix": matrix})
+    print("Response JSON:", response.json())  # Debug output
     assert response.status_code == 200
     result = response.json()
     assert "U" in result
@@ -86,6 +94,7 @@ def test_image_compression():
 
     files = {'file': ('test.png', img_byte_arr, 'image/png')}
     response = client.post("/api/image/compress?component_count=2", files=files)
+    print("Response JSON:", response.json())  # Debug output
     assert response.status_code == 200
     result = response.json()
     assert "compression_ratio" in result
@@ -103,6 +112,7 @@ def test_invalid_matrix():
     # Test with non-square matrix for eigenvalue computation
     matrix = [[1, 2, 3], [4, 5, 6]]
     response = client.post("/api/qr", json={"matrix": matrix})
+    print("Response JSON:", response.json())  # Debug output
     assert response.status_code == 400
 
 def test_invalid_dimensions():
@@ -110,6 +120,7 @@ def test_invalid_dimensions():
     matrix = [[1, 2], [3, 4]]
     vector = [1, 2, 3]  # Wrong dimension
     response = client.post("/api/solve", json={"matrix": matrix, "vector": vector})
+    print("Response JSON:", response.json())  # Debug output
     assert response.status_code == 400
 
 def test_invalid_image_format():
@@ -117,4 +128,5 @@ def test_invalid_image_format():
     invalid_data = b"not an image"
     files = {'file': ('test.txt', invalid_data, 'text/plain')}
     response = client.post("/api/image/compress?component_count=2", files=files)
+    print("Response JSON:", response.json())  # Debug output
     assert response.status_code == 400
