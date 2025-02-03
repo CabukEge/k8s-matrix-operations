@@ -73,6 +73,15 @@ jobs:
         run: |
           kubectl delete validatingwebhookconfiguration ingress-nginx-admission || true
           kubectl delete validatingwebhookconfiguration ingress-nginx-controller-admission || true
+      
+      - name: Verify GITHUB_PAT Exists
+        run: |
+          if [ -z "${{ secrets.GITHUB_PAT }}" ]; then
+            echo "GITHUB_PAT does not exist. Exiting pipeline."
+            exit 1
+          else
+            echo "GITHUB_PAT exists."
+          fi
 
       - name: Create and Verify GHCR Secret in Kubernetes
         run: |
