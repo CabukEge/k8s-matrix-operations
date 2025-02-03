@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: numeric-api-service
+spec:
+  selector:
+    app: numeric-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
