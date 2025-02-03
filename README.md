@@ -22,4 +22,24 @@ This project provides a FastAPI‑based web service for my weekly tasks for nume
 ## Project Structure
 
 
-├── app │   ├── main.py │   ├── numeric07_lu.py │   ├── numeric08_qr.py │   ├── numeric09_eigenvalue.py │   ├── numeric04_imagecompression.py │   ├── numerik04_linearsolver.py │   ├── numerik05_leastsquares.py │   └── numeric06_svd.py ├── k8s │   ├── deployment.yaml │   ├── service.yaml │   ├── ingress.yaml │   └── hpa.yaml ├── .github │   └── workflows │   └── ci-cd.yaml ├── requirements.txt ├── Dockerfile └── README.md
+.
+├── app/
+│   ├── main.py
+│   ├── numeric07_lu.py
+│   ├── numeric08_qr.py
+│   ├── numeric09_eigenvalue.py
+│   ├── numeric04_imagecompression.py
+│   ├── numeric04_linearsolver.py
+│   ├── numeric05_leastsquares.py
+│   └── numeric06_svd.py
+├── k8s/
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   ├── ingress.yaml
+│   └── hpa.yaml
+├── .github/
+│   └── workflows/
+│       └── ci-cd.yaml
+├── requirements.txt
+├── Dockerfile
+└── README.md
