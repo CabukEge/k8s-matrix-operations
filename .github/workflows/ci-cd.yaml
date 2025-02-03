@@ -83,12 +83,20 @@ jobs:
       
       - name: Debug Kubernetes Deployment
         run: |
-          echo "Getting pod status..."
+          echo "=== Pod Status ==="
           kubectl get pods -o wide
-          echo "Getting deployment description..."
-          kubectl describe deployment numeric-api-deployment
-          echo "Getting pod logs..."
-          kubectl logs -l app=numeric-api --tail=50
+          
+          echo "=== Pod Descriptions ==="
+          for pod in $(kubectl get pods -l app=numeric-api -o jsonpath='{.items[*].metadata.name}'); do
+            echo "------ Description for pod: $pod ------"
+            kubectl describe pod "$pod"
+          done
+
+          echo "=== Kubernetes Events (sorted by creation time) ==="
+          kubectl get events --sort-by=.metadata.creationTimestamp
+
+          echo "=== Check Image Pull Secret ==="
+          kubectl get secret ghcr-secret -o yaml || echo "No ghcr-secret found."
       
       - name: Wait for deployment
         run: |
