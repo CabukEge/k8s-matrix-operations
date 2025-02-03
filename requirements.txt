@@ -1,0 +1,6 @@
+fastapi==0.68.1
+uvicorn==0.15.0
+numpy>=1.21.0
+pillow>=8.3.1
+pydantic>=1.8.2
+python-multipart  # for file upload support
