@@ -74,6 +74,14 @@ jobs:
           kubectl delete validatingwebhookconfiguration ingress-nginx-admission || true
           kubectl delete validatingwebhookconfiguration ingress-nginx-controller-admission || true
 
+      - name: Create GHCR Secret in Kubernetes
+        run: |
+          kubectl create secret docker-registry ghcr-secret \
+            --docker-server=ghcr.io \
+            --docker-username="${{ github.actor }}" \
+            --docker-password="${{ secrets.GITHUB_PAT }}" \
+            --docker-email="egecabuk.it@gmail.com" || echo "Secret already exists."
+
       - name: Deploy to Minikube
         run: |
           kubectl apply -f k8s/deployment.yaml
@@ -98,9 +106,10 @@ jobs:
           echo "=== Check Image Pull Secret ==="
           kubectl get secret ghcr-secret -o yaml || echo "No ghcr-secret found."
       
+      # Optionally, wait for the deployment to become available with a shorter timeout.
       - name: Wait for deployment
         run: |
-          kubectl wait --for=condition=available --timeout=600s deployment/numeric-api-deployment
+          kubectl wait --for=condition=available --timeout=300s deployment/numeric-api-deployment
                    
       - name: Get deployment status
         run: |
