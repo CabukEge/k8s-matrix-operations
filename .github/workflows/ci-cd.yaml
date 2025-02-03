@@ -80,11 +80,20 @@ jobs:
           kubectl apply -f k8s/service.yaml
           kubectl apply -f k8s/ingress.yaml
           kubectl apply -f k8s/hpa.yaml
-          
+      
+      - name: Debug Kubernetes Deployment
+        run: |
+          echo "Getting pod status..."
+          kubectl get pods -o wide
+          echo "Getting deployment description..."
+          kubectl describe deployment numeric-api-deployment
+          echo "Getting pod logs..."
+          kubectl logs -l app=numeric-api --tail=50
+      
       - name: Wait for deployment
         run: |
-          kubectl wait --for=condition=available --timeout=300s deployment/numeric-api-deployment
-          
+          kubectl wait --for=condition=available --timeout=600s deployment/numeric-api-deployment
+                   
       - name: Get deployment status
         run: |
           echo "Deployment Status:"
