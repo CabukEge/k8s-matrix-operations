@@ -1,10 +1,7 @@
 import numpy as np
 
 def QR(A):
-    """
-    Computes a QR decomposition of A (with full column rank) using classical Gram-Schmidt.
-    Returns (Q, R) with A = Q * R.
-    """
+    """Computes a QR decomposition using Gram-Schmidt."""
     m, n = A.shape
     Q = np.zeros((m, n))
     R = np.zeros((n, n))
@@ -18,9 +15,7 @@ def QR(A):
     return np.matrix(Q), np.matrix(R)
 
 def BackSubstitution(R, y):
-    """
-    Solves R*x = y for an upper triangular R.
-    """
+    """Solves R*x = y for an upper triangular R."""
     n = R.shape[0]
     x = np.zeros((n, 1))
     for i in range(n - 1, -1, -1):
@@ -29,13 +24,21 @@ def BackSubstitution(R, y):
     return np.matrix(x)
 
 def LeastSquares(A, b):
-    """
-    Solves the least squares problem min|A*x - b| using QR decomposition.
-    """
-    Q, R = QR(A)
+    """Solves least squares using QR decomposition."""
+    print("DEBUG - LeastSquares Called")  
+
+    Q, R = QR(A)  
+
+    print("DEBUG - Q shape:", Q.shape)  
+    print("DEBUG - R shape:", R.shape)  
+
     y = Q.T @ b
     x = BackSubstitution(R, y)
+
+    print("DEBUG - Least Squares Solution Shape:", x.shape)  
+
     return x
+
 
 if __name__=="__main__":
     A = np.matrix([

@@ -38,8 +38,10 @@ def ForwardSubstitution(L, b):
     x = np.zeros((n, 1))
     for i in range(n):
         x[i] = b[i] / L[i, i]
-        b[i+1:n] -= L[i+1:n, i] * x[i]
+        if i + 1 < n:  # Only perform this if there's a next row
+            b[i+1:n] -= L[i+1:n, i] * x[i]
     return x
+
 
 def BackSubstitution(U, b):
     n = U.shape[0]
@@ -50,14 +52,33 @@ def BackSubstitution(U, b):
     return x
 
 def SolveLinearSystemLUP(A, b):
+    print("DEBUG - SolveLinearSystemLUP: Matrix A shape:", A.shape)
+    print("DEBUG - SolveLinearSystemLUP: Vector b shape:", b.shape)
+
     L, U, P = LUP(A)
+
+    print("DEBUG - LUP Decomposition: L shape:", L.shape)
+    print("DEBUG - LUP Decomposition: U shape:", U.shape)
+    print("DEBUG - LUP Decomposition: P shape:", P.shape)
+
     y = ForwardSubstitution(L, P @ b)
+    print("DEBUG - After Forward Substitution, y shape:", y.shape)
+
     x = BackSubstitution(U, y)
+    print("DEBUG - Solution x shape:", x.shape)
+
     return x
 
+
 def LeastSquares(A, b):
-    x = SolveLinearSystemLUP(A.T @ A, A.T @ b)
+    """
+    Solves the least squares problem min|A*x - b| using QR decomposition.
+    """
+    Q, R = QR(A)
+    y = Q.T @ b
+    x = BackSubstitution(R, y)
     return x
+
 
 if __name__ == "__main__":
     A = np.array([[1, 2, 6],

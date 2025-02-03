@@ -74,7 +74,7 @@ def least_squares(req: LeastSquaresRequest):
         b = np.array(req.vector, dtype=float)
         if b.ndim == 1:
             b = b.reshape(-1, 1)
-        x = LeastSquares(A, b)
+        x = LS_LeastSquares(A, b)
         return {"least_squares_solution": x.flatten().tolist()}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
