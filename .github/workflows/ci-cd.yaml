@@ -57,10 +57,10 @@ jobs:
         run: |
           echo "Testing if the image can be pulled from GHCR..."
           if ! docker pull ghcr.io/cabukege/numeric:latest; then
-            echo "❌ Failed to pull image from GHCR. Exiting pipeline."
+            echo "Failed to pull image from GHCR. Exiting pipeline."
             exit 1
           fi
-          echo "✅ Image pull test successful."
+          echo "Image pull test successful."
 
       - name: Set up Minikube
         uses: medyagh/setup-minikube@master
@@ -154,7 +154,11 @@ jobs:
 
       - name: Wait for Pods to be Ready
         run: |
-          kubectl wait --for=condition=Ready pod -l app=numeric-api --timeout=1200s
+          kubectl wait --for=condition=Ready pod -l app=numeric-api --timeout=600s || {
+            echo "Pods not ready after 20 minutes. Checking logs..."
+            kubectl logs -l app=numeric-api
+            exit 1
+          }
 
       - name: Wait for Deployment to be Available
         run: |
