@@ -21,6 +21,11 @@ This project provides a FastAPI‑based web service for my weekly tasks for nume
 
 ## Project Structure
 
+```
+.github/
+    workflows/
+        ci-cd.yaml
+```
 
 ```
 .
@@ -41,12 +46,6 @@ k8s/
     service.yaml
     ingress.yaml
     hpa.yaml
-```
-
-```
-.github/
-    workflows/
-        ci-cd.yaml
 ```
 
 ```
