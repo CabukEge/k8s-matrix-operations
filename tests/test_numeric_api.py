@@ -130,3 +130,40 @@ def test_invalid_image_format():
     response = client.post("/api/image/compress?component_count=2", files=files)
     print("Response JSON:", response.json())  # Debug output
     assert response.status_code == 400
+    
+def test_matrix_operation_accuracy():
+    # Test if LU decomposition actually produces L*U = P*A
+    matrix = [[4, 3], [6, 3]]
+    response = client.post("/api/lu", json={"matrix": matrix})
+    assert response.status_code == 200
+    result = response.json()
+    
+    # Convert results back to numpy arrays for matrix multiplication
+    L = np.array(result["L"])
+    U = np.array(result["U"])
+    P = np.array(result["P"])
+    A = np.array(matrix)
+    
+    # Check if L*U = P*A
+    LU = L @ U
+    PA = P @ A
+    
+    # Check if the difference is smaller than a tolerance
+    assert np.allclose(LU, PA, rtol=1e-10)
+
+'''
+def test_matrix_size_limit():
+    # Create a large matrix that should exceed processing limits
+    large_size = 1000
+    large_matrix = [[1.0] * large_size for _ in range(large_size)]
+    
+    response = client.post("/api/svd", json={"matrix": large_matrix})
+    print("Response JSON:", response.json())  # Debug output
+    
+    # Should return 400 Bad Request due to size limitations
+    assert response.status_code == 400
+    
+    # Optionally check for specific error message
+    result = response.json()
+    assert "detail" in result  # API should return error details
+'''
